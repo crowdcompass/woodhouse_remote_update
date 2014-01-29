@@ -55,7 +55,7 @@ module WoodhouseRemoteUpdate::Sender
         type = type.to_sym
         updater = nil
 
-        @mutex.synchronize do
+        WoodhouseRemoteUpdate::Sender::Updater.mutex.synchronize do
           Thread.current[:hub_updaters] ||= {}
           updater = Thread.current[:hub_updaters][type] ||= Batched.new(type, self)
         end
@@ -73,7 +73,7 @@ module WoodhouseRemoteUpdate::Sender
 
     end
 
-    self.mutex = Mutex.new
+    @mutex = Mutex.new
 
     private
 
