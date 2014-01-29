@@ -15,10 +15,6 @@ module WoodhouseRemoteUpdate::Sender
       self.listener ||= keyw[:listener] || NullUpdateListener
     end
 
-    def listener
-      # ;)
-    end
-
     def update(data)
       send_update(type, data)
     end
