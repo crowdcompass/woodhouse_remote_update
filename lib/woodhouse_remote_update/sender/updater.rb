@@ -29,11 +29,15 @@ module WoodhouseRemoteUpdate::Sender
       def listener=(v)
         updater.listener = v
       end
+      
+      def cancel!
+        @canceled = true
+      end
 
       def in_batch
         @batch = []
         yield self
-        updater.update(@batch) unless @batch.empty?
+        updater.update(@batch) unless empty? or canceled?
       ensure
         @batch = nil
       end
@@ -44,6 +48,14 @@ module WoodhouseRemoteUpdate::Sender
         else
           updater.update(data)
         end
+      end
+      
+      def empty?
+        @batch.nil? or @batch.empty?
+      end
+      
+      def canceled?
+        @canceled
       end
 
     end
